@@ -9,9 +9,9 @@
                 ...
         ~~~
 
-2. 웹뷰에 웹 페이지 표시하기
+2. 웹뷰에 웹 페이지 표시하기.
 3. 키보드의 검색 버튼 동작 정의하기. 
-4. 뒤로가기 동작 재정의
+4. 뒤로가기 동작 재정의.
 
 # 2. 옵션 메뉴 사용하기 
 > 옵션 메뉴 : 상단 툴바에 표시되는 메뉴를 뜻함.
@@ -34,5 +34,61 @@
 > 컨텍스트 메뉴 : 특정 뷰를 길게 눌렀을 때 보여지는 메뉴. 
 1. 메뉴 리소스 생성
 2. onCreateContextMenu() 메서드를 재정의 후 메뉴를 붙임. 
-3. onContextItemSelected() 메서드를 재정의 후 메뉴 분기 처리. 
+3. onContextItemSelected() 메서드를 재정의 후 메뉴 이벤트 처리. 
 4. registerForContextMenu(View view) 메서드에 컨텍스트 메뉴에 표시할 뷰 지정. 
+
+
+
+# 4. Intent 사용하기
+## Intent 종류.
+1. 문자열 데이터 보내기
+    ~~~kotlin
+    val intent = Intent(Intent.ACTION_SEND)
+    intent.apply {
+        type = "text/plain"
+        putExtra(Intent.EXTRA_TEXT, "Hello Kong")
+        var chooser = Intent.createChooser(intent, null)
+        if(intent.resolveActivity(packageManager) != null) {
+            startActivity(chooser)
+        }
+
+    }
+    ~~~
+2. 웹 브라우저 띄우기
+    ~~~kotlin
+    val intent = Intent(Intent.ACTION_VIEW)
+    intent.data = Uri.parse("https://kongsubin.github.io/")
+    if(intent.resolveActivity(packageManager) != null){
+        startActivity(intent)
+    }
+    ~~~
+3. 전화걸기 
+    ~~~kotlin
+    val intent = Intent(Intent.ACTION_DIAL)
+    intent.data = Uri.parse("tel:010-1234-5678")
+    if(intent.resolveActivity(packageManager) != null){
+        startActivity(intent)
+    }
+    ~~~
+4. [공식문서](https://developer.android.com/guide/components/intents-common)
+
+> resolveActivity : 실행할 엑티비티가 존재하는지 여부를 확인 
+
+
+# 5. 패키지 가시성
+> 패키지 가시성 : 안드로이드 11 이상을 타겟팅하는 앱에서, 개인정보에 민감한 인텐트의 사용이 제한됨.  
+
+#### example
+> 전화 및 이베일 기능이 동작하기 위해서는 앱에서 해당 인텐트를 사용한다는 가시성 설정을 해야함. 
+
+    ~~~xml
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.DIAL"></action>
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.SENDTO"></action>
+            <data android:scheme="*"></data>
+        </intent>
+    </queries>
+    ~~~

@@ -4,6 +4,17 @@
     package="com.kongsub.mywebbrowser">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.DIAL"></action>
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.SENDTO"></action>
+            <data android:scheme="*"></data>
+        </intent>
+    </queries>
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"

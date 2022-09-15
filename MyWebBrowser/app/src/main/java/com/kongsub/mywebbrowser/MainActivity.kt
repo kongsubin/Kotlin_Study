@@ -1,10 +1,13 @@
 package com.kongsub.mywebbrowser
 
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.ContextMenu
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -48,6 +51,17 @@ class MainActivity : AppCompatActivity() {
                 false
             }
         }
+
+
+        // -----------------------------------------------------------//
+        //                  3-2. 컨텍스트 메뉴 등록하기.                    //
+        // -----------------------------------------------------------//
+        // 컨텍스트 메뉴 등록
+        registerForContextMenu(binding.webView)
+
+
+
+
     }
 
     // -----------------------------------------------------------//
@@ -76,15 +90,15 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId){
             R.id.action_google, R.id.action_home -> {
-                binding.webView.loadUrl("")
+                binding.webView.loadUrl("https://www.google.com")
                 return true
             }
             R.id.action_naver -> {
-                binding.webView.loadUrl("")
+                binding.webView.loadUrl("https://www.naver.com/")
                 return true
             }
             R.id.action_kong -> {
-                binding.webView.loadUrl("")
+                binding.webView.loadUrl("https://kongsubin.github.io/")
                 return true
             }
             R.id.action_call -> {
@@ -96,17 +110,48 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.action_send_text -> {
                 binding.webView.url?.let { url ->
-                    //
+                    sendSMS("010-1234-1234", url)
                 }
                 return true
             }
             R.id.action_email -> {
                 binding.webView.url?.let { url ->
-                    //
+                    email("kong@test.com", "kong 에게", url)
                 }
                 return true
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+
+    // -----------------------------------------------------------//
+    //                  3-2. 컨텍스트 메뉴 등록하기.                    //
+    // -----------------------------------------------------------//
+    override fun onCreateContextMenu(
+        menu: ContextMenu?,
+        v: View?,
+        menuInfo: ContextMenu.ContextMenuInfo?
+    ) {
+        super.onCreateContextMenu(menu, v, menuInfo)
+        menuInflater.inflate(R.menu.context, menu)
+    }
+    // -----------------------------------------------------------//
+    //               3-3. 컨텍스트 메뉴 클릭이벤트 처리.                 //
+    // -----------------------------------------------------------//
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_share -> {
+                binding.webView.url?.let { url->
+                    share(url)
+                }
+            }
+            R.id.action_browser -> {
+                binding.webView.url?.let { url->
+                    browse(url)
+                }
+            }
+        }
+        return super.onContextItemSelected(item)
     }
 }
