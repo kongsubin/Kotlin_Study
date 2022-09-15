@@ -17,11 +17,15 @@
 > 옵션 메뉴 : 상단 툴바에 표시되는 메뉴를 뜻함.
 
 1. 메뉴 리소스 준비
+    - res 폴더 우클릭 > new > Android Resource Directory > menu 선택 후 생성  
+    - menu 폴더 우클릭 > new > Menu Resource File 생성
 2. onCreateOptionsMenu() 메서드 재정의 후, true 반환
+    > 메뉴를 표시할 엑티비티 안에 재정의 
 3. onOptionsSelected() 메서드를 재정의하여 메뉴 아이템 선택시, 분기 처리.  
+    > 메뉴를 표시할 엑티비티 안에 재정의 
 
-#### 메뉴 아이템을 툴바 밖으로 노출시키는 방법
-##### showAsAction 옵션 추가 
+### 메뉴 아이템을 툴바 밖으로 노출시키는 방법
+#### showAsAction 옵션 추가 
 - never : 밖으로 절대 노출 x
 - ifRoom : 툴바에 여유가 있는 경우 노출
 - always : 항상 노축
@@ -33,9 +37,17 @@
 # 3. 컨텍스트 메뉴 사용하기
 > 컨텍스트 메뉴 : 특정 뷰를 길게 눌렀을 때 보여지는 메뉴. 
 1. 메뉴 리소스 생성
+    - res폴더 우클릭 > new > Android Resource Directory > menu 선택 후 생성  
+    - menu폴더 우클릭 > new > Menu Resource File 생성
+    
 2. onCreateContextMenu() 메서드를 재정의 후 메뉴를 붙임. 
+    > 메뉴를 표시할 엑티비티 안에 재정의 
+    
 3. onContextItemSelected() 메서드를 재정의 후 메뉴 이벤트 처리. 
+    > 메뉴를 표시할 엑티비티 안에 재정의 
+    
 4. registerForContextMenu(View view) 메서드에 컨텍스트 메뉴에 표시할 뷰 지정. 
+    > 메뉴를 표시할 엑티비티 onCreate() 메소드 안에 재정의 
 
 
 
@@ -78,10 +90,10 @@
 # 5. 패키지 가시성
 > 패키지 가시성 : 안드로이드 11 이상을 타겟팅하는 앱에서, 개인정보에 민감한 인텐트의 사용이 제한됨.  
 
-#### example
+### example
 > 전화 및 이베일 기능이 동작하기 위해서는 앱에서 해당 인텐트를 사용한다는 가시성 설정을 해야함. 
 
-    ~~~xml
+~~~xml
     <queries>
         <intent>
             <action android:name="android.intent.action.DIAL"></action>
@@ -91,4 +103,4 @@
             <data android:scheme="*"></data>
         </intent>
     </queries>
-    ~~~
+~~~
