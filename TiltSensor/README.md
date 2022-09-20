@@ -22,3 +22,85 @@
 
 - 다른 앱 실행 or 홈키 및 전원버튼을 눌러 화면을 끄는 경우 : onPause(), onStop()까지 호출됨. 
 - 다시 실행하는 경우 : onRestart() -> onStart() -> onResume() 순으로 호출됨. 
+
+
+# 센서 사용하기
+1. SensorManager 인스턴스 가져오기.
+    ~~~kotlin
+    private val sensorManager by lazy {
+        getSystemService(Context.SENSOR_SERVICE) as SensorManager
+    }
+    ~~~
+
+2. onResume() 메서드에서 registerListener() 메서드로 센서의 감지 등록. 
+    ~~~kotlin
+    override fun onResume() {
+        super.onResume()
+        sensorManager.registerListener(this,
+            sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+            SensorManager.SENSOR_DELAY_NORMAL)
+    }
+    ~~~
+    
+3. onPause() 메서드에 unregisterListener() 메서드로 센서의 감지를 해제. 
+    ~~~kotlin
+    override fun onPause() {
+        super.onPause()
+        sensorManager.unregisterListener(this)
+    }
+    ~~~
+    
+4. SensorEventListener 상속 후 메서드 정의  
+    ~~~kotlin
+    class MainActivity : AppCompatActivity(), SensorEventListener {
+    ...
+
+        // 센서값이 변경되면 호출됨.
+        override fun onSensorChanged(event: SensorEvent?) {
+            // value[0] : x축 값 : 위로 기울이면 -10~0, 아래로 기울이면 0~10
+            // value[1] : y축 값 : 위로 기울이면 -10~0, 오른쪽으로 기울이면 0~10
+            // value[2] : z축 값 : 미사용
+            event?.let {
+                Log.d("MainActivity", "onSensorChanged: x : " + "${event.values[0]}, y : ${event.values[1]}, z : ${event.values[2]}")
+            }
+
+        }
+        // 센서 정밀도가 변경되면 호출됨.
+        override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
+            TODO("Not yet implemented")
+        }
+        
+    ...
+    }
+    ~~~
+    
+    
+# 커스텀 뷰 만들기
+1. View 클래스를 상속하는 클래스 생성.
+    ~~~kotlin
+    class TiltView(context: Context?) : View(context) {
+     ...
+    }
+    ~~~
+    
+2. 필요한 메서드 override
+example
+    ~~~kotlin
+    override fun onDraw(canvas: Canvas?) {
+        super.onDraw(canvas)
+        ...
+    }
+    ~~~
+    
+3. Activity에 Custom View 세팅
+    ~~~kotlin
+    private lateinit var tiltView: TiltView
+    
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // TiltView 초기화
+        tiltView = TiltView(this)
+        setContentView(tiltView)
+    }
+    ~~~
