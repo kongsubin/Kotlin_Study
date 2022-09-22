@@ -13,6 +13,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import com.kongsub.mygallery.databinding.ActivityMainBinding
+import kotlin.concurrent.timer
 
 
 class MainActivity : AppCompatActivity() {
@@ -93,5 +94,15 @@ class MainActivity : AppCompatActivity() {
             }
         }
         Log.d("MainActivity", "getAllPhotos: $uris")
+
+
+
+        // ViewPager 2 어댑터 연결
+        val adapter = MyPagerAdapter(supportFragmentManager, lifecycle)
+        adapter.uris = uris
+
+        binding.viewPager.adapter = adapter
+
+        
     }
 }
