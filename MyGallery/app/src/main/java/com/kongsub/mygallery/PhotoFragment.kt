@@ -1,31 +1,25 @@
 package com.kongsub.mygallery
 
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import coil.load
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [PhotoFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+// 컴파일시 결정되는 상수. 파일내에서 어디든 사용 가능.
+private const val ARG_URI = "uri"
 class PhotoFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private lateinit var uri: Uri
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+        // ARG_URI 키에 저장된 uri 값 얻기.
+        arguments?.getParcelable<Uri>(ARG_URI)?.let {
+            uri = it
         }
     }
 
@@ -34,25 +28,31 @@ class PhotoFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        // 프래그먼트에 표시할 뷰를 생성
         return inflater.inflate(R.layout.fragment_photo, container, false)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val imageView = view.findViewById<ImageView>(R.id.imageView)
+        //requireContext() : 프래그먼트에서 컨텍스트 얻기.
+        val descriptor = requireContext().contentResolver.openFileDescriptor(uri, "r")
+        descriptor?.use {
+            val bitmap = BitmapFactory.decodeFileDescriptor(descriptor.fileDescriptor)
+            imageView.load(bitmap)
+        }
+    }
+
+    // newInstance() 메서드 : 프래그먼트를 생성함.
+    // 인자 값으로 Uri 를 전달함. 전달한 Uri 는 Bundle 객체에 ARG_URL 키로 저장
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment PhotoFragment.
-         */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(uri: Uri) =
             PhotoFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    putParcelable(ARG_URI, uri)
+
                 }
             }
     }
