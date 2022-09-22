@@ -1,27 +1,45 @@
-package com.kongsub.mygallery
+# 안드로이드 저장소 
+### 내부 저장소
+OS가 설치된 영역으로, 유저가 접근할 수 없는 시스템 영역이다. 
+앱이 사용하는 정보와 데이터베이스가 저장된다. 
 
-import android.Manifest
-import android.content.ContentUris
-import android.content.pm.PackageManager
-import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.provider.MediaStore
-import android.util.Log
-import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AlertDialog
-import androidx.core.app.ActivityCompat
-import com.kongsub.mygallery.databinding.ActivityMainBinding
-import kotlin.concurrent.timer
+# 안드로이드 권한 
+### 정상 권한
+> 안드로이드 매니페스트 파일에 권한을 추가하면 됨.
+> ex) 인터넷 엑세스 권한 
 
+### 위험 권한
+> 안드로이드 매니페스트 뿐만 아니라, 실행 중에 사용자에게 권한을 요청해야함. 
+> ex) 외부 저장소 읽기 권한 (갤러리, 카메라, 위치 등)
 
-class MainActivity : AppCompatActivity() {
+### 외부 저장소
+컴퓨터에 기기를 연결하면 저장소로 인식되며 유저가 사용하는 영역이다. 
+사진과 동영상은 외부 저장소에 저장된다. 
 
-    private val binding by lazy {
-        ActivityMainBinding.inflate(layoutInflater)
-    }
+# 프로바이더 사용
+### 콘텐츠 프로바이더란? 
+> 앱의 데이터 접근을 다른 앱에 허용하는 컴포넌트 
 
+### 프로바이더를 이용하여 사진 가져오기
+1. 사진 데이터는 외부에 있으므로, 외부 저장소 읽기 권한을 앱에 부여함.
+    ~~~kotlin
+    <manifest 
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        package="com.kongsub.mygallery">
+            
+        <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
+        <application
+        ...
+        </application>
+    </manifest>
+    ~~~
+    
+2. 외부 저장소 읽기 권한은 위험 권한으로 사용자에게 권한을 허용하도록 해야함.
+    > ContextCompat.checkSelfPermission() 메서드를 사용하여 권한 여부를 확인함. 
+    > 권한이 있는경우, PERMISSION_GRANTED 반환. 없는 경우, PERMISSION_DENIED가 반환됨.
+    ~~~kotlin
     // 권한 요청에 대한 결과 처리
     private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
         if(isGranted){
@@ -31,12 +49,11 @@ class MainActivity : AppCompatActivity() {
             // 권한 거부
             Toast.makeText(this, "권한 거부 됨", Toast.LENGTH_SHORT).show()
         }
-
     }
-
+    
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(binding.root)
+        
+        ...
 
         // 권한이 부여되었는지 확인.
         if(ActivityCompat.checkSelfPermission(
@@ -64,10 +81,15 @@ class MainActivity : AppCompatActivity() {
             }
             return
         }
-        // 권한이 이미 허용됨
+        // 권한이 이미 허용됨 - 외부 저장소 사진을 URI로 가져오는 메소드 
         getAllPhotos()
+        
+        ...
     }
+    ~~~
 
+3. contentResolver 객체를 이용하여 데이터를 Cursor 객체로 가져옴.
+    ~~~kotlin
     private fun getAllPhotos() {
         val uris = mutableListOf<Uri>()     // mutableListOf : 수정가능한 리스트
 
@@ -94,25 +116,32 @@ class MainActivity : AppCompatActivity() {
             }
         }
         Log.d("MainActivity", "getAllPhotos: $uris")
-
-
-
-        // ViewPager 2 어댑터 연결
-        val adapter = MyPagerAdapter(supportFragmentManager, lifecycle)
-        adapter.uris = uris
-
-        binding.viewPager.adapter = adapter
-
-        // 슬라이드 구현 - 3초마다 자동 슬라이드
-        timer(period = 3000) {
-            runOnUiThread {
-                if(binding.viewPager.currentItem < adapter.itemCount - 1){
-                    binding.viewPager.currentItem = binding.viewPager.currentItem + 1
-                }else {
-                    binding.viewPager.currentItem = 0
-                }
-            }
-        }
-
     }
-}
+    ~~~
+
+#### 참고 
+Cursor : Cursor객체의 사용이 끝나면, close()로 반드시 닫아야함. 닫지 않을 경우 메모리 누수가 일어남. 
+URI : 안드로이드 기기 내부의 데이터를 표현하는 방법 
+
+
+
+# Coil 라이브러리
+> 이미지를 표시하는 100% 코틀린 코드로 작성된 라이브러리.
+
+1. Coil 라이브러리 의존성 추가
+    ~~~kotlin
+    dependencies {
+        //Coil
+        implementation 'io.coil-kt:coil:1.3.2'
+    }
+    ~~~
+
+
+2. 사용
+    ~~~kotlin
+    import coil.load
+
+    ...
+
+        imageView.load(bitmap)
+    ~~~
