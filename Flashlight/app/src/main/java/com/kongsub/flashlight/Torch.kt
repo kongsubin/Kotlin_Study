@@ -24,6 +24,12 @@ class Torch(context: Context) {
         }
     }
 
+    fun flashOff() {
+        cameraId?.let {
+            cameraManager.setTorchMode(it, false)
+        }
+    }
+
     // 카메라 ID 를 얻어오는 메소드. 카메라가 없는 경우 null 이므로 반환값을 String?으로 지정.
     private fun getCameraId(): String? {
         // 기기가 가지고 있는 모든 카메라 정보 가져옴.
