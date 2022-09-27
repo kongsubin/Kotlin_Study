@@ -15,6 +15,7 @@ class TorchService : Service() {
         Torch(this)
     }
 
+    private var isRunning = false
     /* onStartCommand 반환값 3가지
         1. START_STICKY : null 인텐트로 다시 시작함. 명령을 실행하지는 않지만 무기한으로 실행 중이고, 작업을 기다리고 있는 미디어 플레이어와 비슷한 경우에 적합함.
         2. START_NOT_STICKY : 다시 시작하지 않음.
@@ -25,9 +26,20 @@ class TorchService : Service() {
             // 앱에서 실행할 경우
             "on" -> {
                 torch.flashOn()
+                isRunning = true
             }
             "off" -> {
                 torch.flashOff()
+                isRunning = false
+            }
+            // 서비스에서 실행할 경우
+            else -> {
+                isRunning = !isRunning
+                if(!isRunning){
+                    torch.flashOn()
+                } else {
+                    torch.flashOff()
+                }
             }
         }
         //super.onStartCommand 호출시, 내부적으로 START_STICKY 를 반환함.
