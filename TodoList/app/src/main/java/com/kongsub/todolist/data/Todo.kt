@@ -6,8 +6,8 @@ import java.util.*
 
 @Entity
 data class Todo (
-    val title: String,
-    val date: Long = Calendar.getInstance().timeInMillis,
+    var title: String,
+    var date: Long = Calendar.getInstance().timeInMillis,
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
