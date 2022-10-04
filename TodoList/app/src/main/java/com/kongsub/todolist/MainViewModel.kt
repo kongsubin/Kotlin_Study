@@ -20,6 +20,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         TodoDatabase::class.java, "todo"
     ).build()
 
+    var selectedTodo: Todo? = null
+
     // DB의 결과를 관찰할 수 있도록 하는 방법
     // StateFlow: 현재 상태와 새로운 상태 업데이트를 관찰하는 곳에 보내는 데이터 흐름을 표현함. (상태 = 데이타)
     // -> 주로 UI에 상태(데이터)를 표현할때 사용함.
@@ -43,27 +45,24 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     // 할 일 추가
-    fun addTodo(text: String) {
+    fun addTodo(text: String, date: Long) {
         viewModelScope.launch {
-            db.todoDao().insert(Todo(text))
+            db.todoDao().insert(Todo(text, date))
         }
     }
 
     // 할 일 수정
-    fun updateTodo(id: Long, text: String) {
-        _items.value
-            .find { todo -> todo.id == id}  // 수정할 객체를 찾는다.
-            ?.let { todo ->                 // 찾은 경우, 정보 수정하기
-                todo.apply {
-                    title = text
-                    date = Calendar.getInstance().timeInMillis
-                }
-
-                // 업데이트 수행
-                viewModelScope.launch {
-                    db.todoDao().update(todo)
-                }
+    fun updateTodo(text: String, date: Long) {
+        selectedTodo?.let { todo ->
+            todo.apply {
+                this.title = text
+                this.date = date
             }
+            viewModelScope.launch {
+                db.todoDao().update(todo)
+            }
+            selectedTodo = null
+        }
     }
 
     // 할 일 삭제 메서드
@@ -74,6 +73,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 viewModelScope.launch {
                     db.todoDao().delete(todo)
                 }
+                selectedTodo = null
             }
     }
 
