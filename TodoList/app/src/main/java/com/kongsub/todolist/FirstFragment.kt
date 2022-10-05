@@ -57,7 +57,7 @@ class FirstFragment : Fragment() {
                 // collect 메서드 : suspense 함수로 지연실행됨.
                 viewModel.items.collect{
                     Log.d("FirstFragment", it.toString())
-                    todoListAdapter.submitList(it)
+                    todoListAdapter.submitList(it) // 표시할 아이템 리스트를 submitList 메서드에 전달. 해당 메서드는 자동으로 변경점을 배교하여 변경이 일어난 아이템을 교체함.
                 }
             }
         }
