@@ -17,7 +17,8 @@
     <!-- Splash Screen Theme. -->
     <style name="Theme.Splash" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/black</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/logo</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/news_avd_v02</item>
+        <item name="windowSplashScreenIconBackgroundColor">#0071B8</item>
         <item name="windowSplashScreenAnimationDuration">300</item>
         <item name="postSplashScreenTheme">@style/Theme.SplashScreenAPI</item>
     </style>
