@@ -14,11 +14,12 @@
 
 <br>
 <br>
+
 # 서비스의 생명주기 
 
-[서비스 생명주기 공식 문서](https://developer.android.com/guide/components/services#Lifecycle)
+![서비스 생명주기 이미지](https://developer.android.com/static/images/service_lifecycle.png)
 
-[서비스 생명주기 이미지](https://developer.android.com/static/images/service_lifecycle.png)
+[서비스 생명주기 공식 문서](https://developer.android.com/guide/components/services#Lifecycle)
 
 - onCreate() : 서비스가 생성될 때 호출되는 콜백 메서드. 초기화를 수행함. 
 
