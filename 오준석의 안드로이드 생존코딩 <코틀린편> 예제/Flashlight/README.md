@@ -14,11 +14,17 @@
 
 <br>
 <br>
+
 # 서비스의 생명주기 
+
+![서비스 생명주기 이미지](https://developer.android.com/static/images/service_lifecycle.png)
+
 [서비스 생명주기 공식 문서](https://developer.android.com/guide/components/services#Lifecycle)
-[서비스 생명주기 이미지](https://developer.android.com/static/images/service_lifecycle.png)
+
 - onCreate() : 서비스가 생성될 때 호출되는 콜백 메서드. 초기화를 수행함. 
+
 - onStartCommand() : 서비스가 액티비티와 같은 다른 컴포넌트로부터 startService() 메서드로 호출되면 불리는 콜백 메소드. 실행할 작업을 작성하는 부분임. 
+
 - onDestroy() : 서비스 내부에서 stopSelf()를 호출하거나 외부에서 stopService()로 서비스를 종료하면 호출됨. 
 
 <br>
