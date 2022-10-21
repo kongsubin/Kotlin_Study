@@ -95,7 +95,7 @@ private fun Greeting(name: String) {
     // remember - 변경가능하다는 것을 기억할 수 있게 함.
     var expanded by remember { mutableStateOf(false) }
 
-    // animateDpAsState : 애니메이션 상태 
+    // animateDpAsState : 애니메이션 상태
     val extraPadding by animateDpAsState(
         if (expanded) 48.dp else 0.dp,
         animationSpec = spring(
