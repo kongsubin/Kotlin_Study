@@ -1,3 +1,26 @@
 <resources>
     <string name="app_name">Busan City</string>
+
+    <string name="list_fragment_label">Busan City</string>
+    <string name="back_button">Back</string>
+
+    <string name="cafe">Cafe</string>
+    <string name="restaurant">Restaurant</string>
+    <string name="park">Park</string>
+    <string name="child">Child Like</string>
+    <string name="shopping_center">Shopping Center</string>
+
+    <string name="cafe_in_busan">Cafe In Busan</string>
+    <string name="wave_on_coffee">Wave On Coffee</string>
+    <string name="doko">DOKO</string>
+    <string name="magnate">MAGNATE</string>
+    <string name="black_up_cafe">Black UP Cafe</string>
+    <string name="cafe_haute">Cafe Haute</string>
+    <string name="edge993">EDGE993</string>
+
+    <string name="cafe_detail">Coffee is a drink prepared from roasted coffee beans.
+        Darkly colored, bitter, and slightly acidic, coffee has a stimulating effect
+        on humans, primarily due to its caffeine content.
+        It is the most popular hot drink in the world.</string>
+
 </resources>
