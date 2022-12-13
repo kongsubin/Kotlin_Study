@@ -66,4 +66,66 @@ object LocalPlaceDataProvider {
             )
         )
     }
+
+
+    fun getParksData(): List<Place> {
+        return listOf(
+            Place(
+                id = 1,
+                categoryId = R.string.park,
+                titleResourceId = R.string.heaundae_beach,
+                startPoint = 4.0,
+                imageResourceId = R.drawable.heaundae_beach,
+                newsDetails = R.string.park_detail
+            ),
+            Place(
+                id = 2,
+                categoryId = R.string.park,
+                titleResourceId = R.string.gwangalli_beach,
+                startPoint = 4.2,
+                imageResourceId = R.drawable.gwangalli_beach,
+                newsDetails = R.string.park_detail
+            ),
+            Place(
+                id = 3,
+                categoryId = R.string.park,
+                titleResourceId = R.string.un_memorial_cemetery,
+                startPoint = 4.4,
+                imageResourceId = R.drawable.un_memorial_cemetery,
+                newsDetails = R.string.park_detail
+            ),
+            Place(
+                id = 4,
+                categoryId = R.string.park,
+                titleResourceId = R.string.songdo_beach,
+                startPoint = 4.0,
+                imageResourceId = R.drawable.songdo_beach,
+                newsDetails = R.string.park_detail
+            ),
+            Place(
+                id = 5,
+                categoryId = R.string.park,
+                titleResourceId = R.string.yongdusan_park,
+                startPoint = 4.0,
+                imageResourceId = R.drawable.yongdusan_park,
+                newsDetails = R.string.park_detail
+            ),
+            Place(
+                id = 6,
+                categoryId = R.string.park,
+                titleResourceId = R.string.dongbaekseom,
+                startPoint = 4.3,
+                imageResourceId = R.drawable.dongbaekseom,
+                newsDetails = R.string.park_detail
+            ),
+            Place(
+                id = 7,
+                categoryId = R.string.park,
+                titleResourceId = R.string.dadaepo_beach,
+                startPoint = 4.3,
+                imageResourceId = R.drawable.dadaepo_beach,
+                newsDetails = R.string.park_detail
+            )
+        )
+    }
 }

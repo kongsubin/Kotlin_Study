@@ -10,6 +10,7 @@
     <string name="child">Child Like</string>
     <string name="shopping_center">Shopping Center</string>
 
+    <!-- cafe -->
     <string name="cafe_in_busan">Cafe In Busan</string>
     <string name="wave_on_coffee">Wave On Coffee</string>
     <string name="doko">DOKO</string>
@@ -22,5 +23,23 @@
         Darkly colored, bitter, and slightly acidic, coffee has a stimulating effect
         on humans, primarily due to its caffeine content.
         It is the most popular hot drink in the world.</string>
+
+    <!-- park -->
+    <string name="heaundae_beach">Heaundae Beach</string>
+    <string name="gwangalli_beach">Gwangalli Beach</string>
+    <string name="un_memorial_cemetery">UN Memorial Cemetery</string>
+    <string name="songdo_beach">Songdo Beach</string>
+    <string name="yongdusan_park">Yongdusan Park</string>
+    <string name="dongbaekseom">Dongbaekseom</string>
+    <string name="dadaepo_beach">Dadaepo Beach</string>
+
+    <string name="park_detail">A beach is a landform alongside a body of water
+        which consists of loose particles. The particles composing a beach are typically
+        made from rock, such as sand, gravel, shingle, pebbles, etc., or biological sources,
+        such as mollusc shells or coralline algae. Sediments settle in different densities
+        and structures, depending on the local wave action and weather, creating different textures,
+        colors and gradients or layers of material.</string>
+
+
 
 </resources>
