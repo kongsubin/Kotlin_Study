@@ -1,18 +1,21 @@
 package com.kongsub.busancity.ui
 
 
+import android.app.Activity
 import androidx.activity.compose.BackHandler
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material.icons.rounded.*
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -21,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -31,14 +35,32 @@ import com.kongsub.busancity.model.Place
 import java.lang.Math.ceil
 import java.lang.Math.floor
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.kongsub.busancity.ui.theme.BusanCityTheme
+import com.kongsub.busancity.utils.ContentType
 
 @Composable
 fun BusanCityApp(
-    windowSize: WindowSizeClass,
+    windowSize: WindowWidthSizeClass,
     modifier: Modifier = Modifier,
 ) {
     val viewModel: PlacesViewModel = viewModel()
     val uiState by viewModel.uiState.collectAsState()
+    val contentType: ContentType
+
+    when (windowSize) {
+        WindowWidthSizeClass.Compact -> {
+            contentType = ContentType.LIST_ONLY
+        }
+        WindowWidthSizeClass.Medium -> {
+            contentType = ContentType.LIST_ONLY
+        }
+        WindowWidthSizeClass.Expanded -> {
+            contentType = ContentType.LIST_AND_DETAIL
+        }
+        else -> {
+            contentType = ContentType.LIST_ONLY
+        }
+    }
 
     Scaffold (
         topBar = {
@@ -53,31 +75,71 @@ fun BusanCityApp(
         }
     ){
         innerPadding ->
-        if(uiState.isShowingCategoryPage){
-            PlaceList(
-                places = uiState.placesList,
-                onClick = {
-                    viewModel.updateCurrentPlace(it)
-                    viewModel.navigateToDetailPage()
-                }
-            )
-        }
-        else if(uiState.isShowingDetailPage){
-            PlaceDetail(
-                selectedPlace = uiState.currentPlace,
-                onBackPressed = {
-                    viewModel.navigateToCategoryListPage()
-                }
-            )
-        }else {
-            CategoryList(
-                onClick = {
+        if(contentType == ContentType.LIST_AND_DETAIL){
+            ListAndDetailScreen(
+                categoryOnClick = {
                     viewModel.updateCurrentCategory(it)
                     viewModel.navigateToCategoryPage()
-                }
+                },
+                places = uiState.placesList,
+                placeOnClick = {
+                    viewModel.updateCurrentPlace(it)
+                    viewModel.navigateToDetailPage()
+                },
+                selectedPlace = uiState.currentPlace
             )
+        } else {
+            if(uiState.isShowingCategoryPage){
+                PlaceList(
+                    places = uiState.placesList,
+                    onClick = {
+                        viewModel.updateCurrentPlace(it)
+                        viewModel.navigateToDetailPage()
+                    }
+                )
+            }
+            else if(uiState.isShowingDetailPage){
+                PlaceDetail(
+                    selectedPlace = uiState.currentPlace,
+                    onBackPressed = {
+                        viewModel.navigateToCategoryListPage()
+                    }
+                )
+            }else {
+                CategoryList(
+                    onClick = {
+                        viewModel.updateCurrentCategory(it)
+                        viewModel.navigateToCategoryPage()
+                    }
+                )
+            }
         }
-
+    }
+}
+@Composable
+fun ListAndDetailScreen(
+    categoryOnClick: (Int) -> Unit,
+    places: List<Place>,
+    placeOnClick: (Place) -> Unit,
+    selectedPlace: Place,
+    modifier: Modifier = Modifier
+){
+    Row(modifier = modifier.fillMaxWidth()) {
+        CategoryList(
+            onClick = categoryOnClick,
+            isExpanded = true,
+            modifier = modifier.weight(1f))
+        PlaceList(
+            places = places,
+            onClick = placeOnClick,
+            modifier = modifier.weight(3f)
+        )
+        val activity = (LocalContext.current as Activity)
+        PlaceDetail(
+            selectedPlace = selectedPlace,
+            onBackPressed = { activity.finish() },
+            modifier = modifier.weight(3f)
+        )
     }
 }
 
@@ -89,6 +151,7 @@ fun BusanCityAppBar(
     currentCategory: Int,
     isShowingCategoryPage: Boolean,
     isShowingDetailPage: Boolean,
+    isExpanded: Boolean = false,
     modifier: Modifier = Modifier
 ) {
     //val isShowingDetailPage = windowSize != WindowWidthSizeClass.Expanded && !isShowingListPage
@@ -105,7 +168,7 @@ fun BusanCityAppBar(
             )
         },
         navigationIcon =
-        if (isShowingCategoryPage) {
+        if (isShowingCategoryPage && !isExpanded) {
             {
                 IconButton(onClick = navigateToCategoryListPage) {
                     Icon(
@@ -114,7 +177,7 @@ fun BusanCityAppBar(
                     )
                 }
             }
-        } else if( isShowingDetailPage ){
+        } else if(isShowingDetailPage && !isExpanded){
             {
                 IconButton(onClick = navigateToCategoryPage) {
                     Icon(
@@ -138,6 +201,7 @@ fun CategoryItem(
     @StringRes categoryId: Int,
     icon: ImageVector,
     onClick: (Int) -> Unit,
+    isExpanded: Boolean = false,
     modifier: Modifier = Modifier
 ){
     Card(
@@ -147,29 +211,42 @@ fun CategoryItem(
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .heightIn(min = 80.dp, max = 80.dp)
-                .padding(5.dp)
+            modifier =
+            if(!isExpanded) {
+                Modifier
+                    .fillMaxWidth()
+                    .heightIn(min = 80.dp, max = 80.dp)
+                    .padding(5.dp)
+            }else {
+                Modifier
+                    .width(width = 80.dp)
+                    .heightIn(min = 80.dp, max = 80.dp)
+                    .padding(5.dp)
+            }
         ) {
             Icon(
                 imageVector = icon,
                 contentDescription = stringResource(id = categoryId),
                 modifier = modifier
-                    .size(50.dp)
-                    .padding(start = 20.dp)
+                    .size(80.dp)
+                    .padding(10.dp)
             )
-            Text(
-                text = stringResource(id = categoryId),
-                style = MaterialTheme.typography.h6,
-                modifier = Modifier.padding(20.dp))
+            if(!isExpanded) {
+                Text(
+                    text = stringResource(id = categoryId),
+                    style = MaterialTheme.typography.h6,
+                    modifier = Modifier.padding(20.dp)
+                )
+            }
         }
     }
 }
 
 @Composable
 fun CategoryList(
-    onClick: (Int) -> Unit
+    onClick: (Int) -> Unit,
+    isExpanded: Boolean = false,
+    modifier: Modifier = Modifier
 ){
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -179,27 +256,32 @@ fun CategoryList(
         CategoryItem(
             categoryId = R.string.cafe,
             icon = Icons.Outlined.Coffee,
-            onClick = onClick
+            onClick = onClick,
+            isExpanded = isExpanded
         )
         CategoryItem(
             categoryId = R.string.restaurant,
             icon = Icons.Outlined.Restaurant,
-            onClick = onClick
+            onClick = onClick,
+            isExpanded = isExpanded
         )
         CategoryItem(
             categoryId = R.string.park,
             icon = Icons.Outlined.Park,
-            onClick = onClick
+            onClick = onClick,
+            isExpanded = isExpanded
         )
         CategoryItem(
             categoryId = R.string.child,
             icon = Icons.Outlined.ChildCare,
-            onClick = onClick
+            onClick = onClick,
+            isExpanded = isExpanded
         )
         CategoryItem(
             categoryId = R.string.shopping_center,
             icon = Icons.Outlined.ShoppingCart,
-            onClick = onClick
+            onClick = onClick,
+            isExpanded = isExpanded
         )
     }
 }
@@ -285,7 +367,7 @@ fun PlaceDetail(
     BackHandler {
         onBackPressed()
     }
-    Column( modifier = modifier.padding(4.dp)) {
+    Column( modifier = modifier.padding(4.dp).verticalScroll(rememberScrollState())) {
         Image(
             painter = painterResource(selectedPlace.imageResourceId),
             contentDescription = null,
@@ -345,6 +427,7 @@ fun RatingBar(
     }
 }
 
+/*
 @Preview
 @Composable
 fun PlaceDetailPreview(){
@@ -354,6 +437,8 @@ fun PlaceDetailPreview(){
     )
 }
 
+ */
+
 @Preview
 @Composable
 fun CategoryListPreview(){
@@ -362,6 +447,16 @@ fun CategoryListPreview(){
     )
 }
 
+@Preview
+@Composable
+fun CategoryListExpendedPreview(){
+    CategoryList(
+        onClick = {},
+        isExpanded = true
+    )
+}
+
+/*
 @Preview
 @Composable
 fun ItemPreview(){
@@ -379,3 +474,15 @@ fun PlaceListPreview(){
         onClick = {}
     )
 }
+
+@Preview
+@Composable
+fun ReplyAppExpandedPreview() {
+    ListAndDetailScreen(
+        categoryOnClick = {},
+        places = LocalPlaceDataProvider.getCafesData(),
+        placeOnClick = {},
+        selectedPlace = LocalPlaceDataProvider.defaultPlaces)
+}
+
+ */
