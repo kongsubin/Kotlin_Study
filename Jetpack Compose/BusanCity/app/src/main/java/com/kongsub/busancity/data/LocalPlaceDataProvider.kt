@@ -67,6 +67,66 @@ object LocalPlaceDataProvider {
         )
     }
 
+    fun getRestaurantsData(): List<Place> {
+        return listOf(
+            Place(
+                id = 1,
+                categoryId = R.string.restaurant,
+                titleResourceId = R.string.jang_su_san,
+                startPoint = 5.0,
+                imageResourceId = R.drawable.jang_su_san,
+                newsDetails = R.string.restaurant_detail
+            ),
+            Place(
+                id = 2,
+                categoryId = R.string.restaurant,
+                titleResourceId = R.string.the_party_haeundae,
+                startPoint = 4.2,
+                imageResourceId = R.drawable.the_party_haeundae,
+                newsDetails = R.string.restaurant_detail
+            ),
+            Place(
+                id = 3,
+                categoryId = R.string.restaurant,
+                titleResourceId = R.string.anga,
+                startPoint = 4.4,
+                imageResourceId = R.drawable.anga,
+                newsDetails = R.string.restaurant_detail
+            ),
+            Place(
+                id = 4,
+                categoryId = R.string.restaurant,
+                titleResourceId = R.string.songjeong_samdae_gukbop,
+                startPoint = 4.0,
+                imageResourceId = R.drawable.songjeong_samdae_gukbop,
+                newsDetails = R.string.restaurant_detail
+            ),
+            Place(
+                id = 5,
+                categoryId = R.string.restaurant,
+                titleResourceId = R.string.gaemijip,
+                startPoint = 4.0,
+                imageResourceId = R.drawable.gaemijip,
+                newsDetails = R.string.restaurant_detail
+            ),
+            Place(
+                id = 6,
+                categoryId = R.string.restaurant,
+                titleResourceId = R.string.geumsu_bokkuk_main,
+                startPoint = 4.0,
+                imageResourceId = R.drawable.geumsu_bokkuk_main,
+                newsDetails = R.string.restaurant_detail
+            ),
+            Place(
+                id = 7,
+                categoryId = R.string.restaurant,
+                titleResourceId = R.string.halmae_gaya_milmyeon,
+                startPoint = 4.0,
+                imageResourceId = R.drawable.halmae_gaya_milmyeon,
+                newsDetails = R.string.restaurant_detail
+            )
+        )
+    }
 
     fun getParksData(): List<Place> {
         return listOf(

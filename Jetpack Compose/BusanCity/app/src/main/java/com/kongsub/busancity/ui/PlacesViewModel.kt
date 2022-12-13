@@ -25,15 +25,16 @@ class PlacesViewModel : ViewModel() {
         var placesList: List<Place> = emptyList()
         when (selectCategory) {
             R.string.cafe -> placesList = LocalPlaceDataProvider.getCafesData()
-            R.string.restaurant -> placesList = LocalPlaceDataProvider.getCafesData()
-            R.string.park -> placesList = LocalPlaceDataProvider.getCafesData()
+            R.string.restaurant -> placesList = LocalPlaceDataProvider.getRestaurantsData()
+            R.string.park -> placesList = LocalPlaceDataProvider.getParksData()
             R.string.shopping_center -> placesList = LocalPlaceDataProvider.getCafesData()
             else -> placesList = LocalPlaceDataProvider.getCafesData()
         }
         _uiState.update {
             it.copy(
                 placesList = placesList,
-                currentCategory = selectCategory)
+                currentCategory = selectCategory,
+                currentPlace = placesList[0])
         }
     }
     fun updateCurrentPlace(selectedPlace: Place) {
