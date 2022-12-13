@@ -1,7 +1,6 @@
 package com.kongsub.busancity.ui
 
 
-import android.telecom.Call.Details
 import androidx.activity.compose.BackHandler
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
@@ -13,7 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material.icons.rounded.*
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -35,18 +34,31 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun BusanCityApp(
+    windowSize: WindowSizeClass,
     modifier: Modifier = Modifier,
 ) {
     val viewModel: PlacesViewModel = viewModel()
     val uiState by viewModel.uiState.collectAsState()
 
-    Scaffold {
+    Scaffold (
+        topBar = {
+            BusanCityAppBar(
+                navigateToCategoryPage = { viewModel.navigateToCategoryPage() },
+                navigateToCategoryListPage = { viewModel.navigateToCategoryListPage() },
+                place = uiState.currentPlace,
+                currentCategory = uiState.currentCategory,
+                isShowingCategoryPage = uiState.isShowingCategoryPage,
+                isShowingDetailPage = uiState.isShowingDetailPage,
+            )
+        }
+    ){
         innerPadding ->
-        if(uiState.isShowingCategoryListPage){
-            CategoryList(
+        if(uiState.isShowingCategoryPage){
+            PlaceList(
+                places = uiState.placesList,
                 onClick = {
-                    viewModel.updateCurrentCategory(it)
-                    viewModel.navigateToCategoryPage()
+                    viewModel.updateCurrentPlace(it)
+                    viewModel.navigateToDetailPage()
                 }
             )
         }
@@ -58,11 +70,10 @@ fun BusanCityApp(
                 }
             )
         }else {
-            PlaceList(
-                places = uiState.placesList,
+            CategoryList(
                 onClick = {
-                    viewModel.updateCurrentPlace(it)
-                    viewModel.navigateToDetailPage()
+                    viewModel.updateCurrentCategory(it)
+                    viewModel.navigateToCategoryPage()
                 }
             )
         }
@@ -72,34 +83,48 @@ fun BusanCityApp(
 
 @Composable
 fun BusanCityAppBar(
-    onBackButtonClick: () -> Unit,
-    isShowingListPage: Boolean,
-    windowSize: WindowWidthSizeClass,
+    navigateToCategoryPage: () -> Unit,
+    navigateToCategoryListPage: () -> Unit,
+    place: Place,
+    currentCategory: Int,
+    isShowingCategoryPage: Boolean,
+    isShowingDetailPage: Boolean,
     modifier: Modifier = Modifier
 ) {
-    val isShowingDetailPage = windowSize != WindowWidthSizeClass.Expanded && !isShowingListPage
+    //val isShowingDetailPage = windowSize != WindowWidthSizeClass.Expanded && !isShowingListPage
     TopAppBar(
         title = {
             Text(
-                if (isShowingDetailPage) {
-                    // place title
-                    "place title"
+                if (isShowingCategoryPage) {
+                    stringResource(id = currentCategory)
+                }else if(isShowingDetailPage) {
+                    stringResource(id = place.titleResourceId)
                 } else {
                     stringResource(R.string.list_fragment_label)
                 }
             )
         },
         navigationIcon =
-        if (isShowingDetailPage) {
+        if (isShowingCategoryPage) {
             {
-                IconButton(onClick = onBackButtonClick) {
+                IconButton(onClick = navigateToCategoryListPage) {
                     Icon(
                         imageVector = Icons.Filled.ArrowBack,
                         contentDescription = stringResource(R.string.back_button)
                     )
                 }
             }
-        } else {
+        } else if( isShowingDetailPage ){
+            {
+                IconButton(onClick = navigateToCategoryPage) {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowBack,
+                        contentDescription = stringResource(R.string.back_button)
+                    )
+                }
+            }
+        }
+        else {
             null
         },
         modifier = modifier
@@ -124,17 +149,19 @@ fun CategoryItem(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxWidth()
-                .heightIn(min = 120.dp, max = 120.dp)
-                .padding(20.dp)
+                .heightIn(min = 80.dp, max = 80.dp)
+                .padding(5.dp)
         ) {
             Icon(
                 imageVector = icon,
                 contentDescription = stringResource(id = categoryId),
-                modifier = modifier.size(70.dp)
+                modifier = modifier
+                    .size(50.dp)
+                    .padding(start = 20.dp)
             )
             Text(
                 text = stringResource(id = categoryId),
-                style = MaterialTheme.typography.h5,
+                style = MaterialTheme.typography.h6,
                 modifier = Modifier.padding(20.dp))
         }
     }
@@ -197,11 +224,17 @@ fun ListItem(
 
         ) {
             ListImageItem(place = place)
-            Text(
-                text = stringResource(place.titleResourceId),
-                style = MaterialTheme.typography.h5,
-                modifier = Modifier.padding(8.dp)
-            )
+            Column(
+                modifier = modifier.padding(8.dp)
+            ){
+                Text(
+                    text = stringResource(place.titleResourceId),
+                    style = MaterialTheme.typography.h5
+                )
+                RatingBar(
+                    rating = place.startPoint
+                )
+            }
         }
     }
 }
@@ -282,7 +315,7 @@ fun RatingBar(
     modifier: Modifier = Modifier,
     rating: Double = 0.0,
     stars: Int = 5,
-    starsColor: Color = Color.Yellow,
+    starsColor: Color = Color(0xFFFDBE02),
 ) {
 
     val filledStars = floor(rating).toInt()

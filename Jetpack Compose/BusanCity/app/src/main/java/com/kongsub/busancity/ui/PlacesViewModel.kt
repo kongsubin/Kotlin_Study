@@ -45,7 +45,7 @@ class PlacesViewModel : ViewModel() {
     fun navigateToCategoryListPage() {
         _uiState.update {
             it.copy(
-                isShowingCategoryListPage = true,
+                isShowingCategoryPage = false,
                 isShowingDetailPage = false)
         }
     }
@@ -54,7 +54,7 @@ class PlacesViewModel : ViewModel() {
 
         _uiState.update {
             it.copy(
-                isShowingCategoryListPage = false,
+                isShowingCategoryPage = true,
                 isShowingDetailPage = false)
         }
     }
@@ -63,7 +63,7 @@ class PlacesViewModel : ViewModel() {
     fun navigateToDetailPage() {
         _uiState.update {
             it.copy(
-                isShowingCategoryListPage = false,
+                isShowingCategoryPage = false,
                 isShowingDetailPage = true)
         }
     }
@@ -76,6 +76,6 @@ data class PlacesUiState(
     val placesList: List<Place> = emptyList(),
     val currentCategory: Int = R.string.cafe,
     val currentPlace: Place = LocalPlaceDataProvider.defaultPlaces,
-    val isShowingCategoryListPage: Boolean = true,
+    val isShowingCategoryPage: Boolean = false,
     val isShowingDetailPage: Boolean = false
 )
