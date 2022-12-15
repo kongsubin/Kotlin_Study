@@ -37,7 +37,6 @@
         and drinks to customers. Meals are generally served and eaten on the premises,
         but many restaurants also offer take-out and food delivery services.</string>
 
-
     <!-- park -->
     <string name="heaundae_beach">Heaundae Beach</string>
     <string name="gwangalli_beach">Gwangalli Beach</string>
@@ -54,6 +53,18 @@
         and structures, depending on the local wave action and weather, creating different textures,
         colors and gradients or layers of material.</string>
 
+    <!-- shopping_center -->
+    <string name="shinsegae_dept_store_centum_city">Shinsegae Dept. Store Centum City</string>
+    <string name="nc_department_store">Nc Department Store</string>
+    <string name="lotte_department_store">Lotte Department Store</string>
+    <string name="gupo_market">Gupo Market</string>
+    <string name="seomyeon_underground_shopping_center">Seomyeon Underground Shopping Center</string>
+    <string name="lotte_mall_dong_busan">Lotte Mall Dong Busan</string>
+    <string name="nampo_underground_shopping_center">Nampo Underground Shopping Center</string>
+
+    <string name="shopping_center_detail">A shopping center (American English) or shopping centre (Commonwealth English),
+        also called a shopping complex, shopping arcade, shopping plaza or galleria, is a group of shops built together,
+        sometimes under one roof.</string>
 
 
 </resources>

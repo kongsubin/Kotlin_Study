@@ -27,7 +27,7 @@ class PlacesViewModel : ViewModel() {
             R.string.cafe -> placesList = LocalPlaceDataProvider.getCafesData()
             R.string.restaurant -> placesList = LocalPlaceDataProvider.getRestaurantsData()
             R.string.park -> placesList = LocalPlaceDataProvider.getParksData()
-            R.string.shopping_center -> placesList = LocalPlaceDataProvider.getCafesData()
+            R.string.shopping_center -> placesList = LocalPlaceDataProvider.getShoppingCentersData()
             else -> placesList = LocalPlaceDataProvider.getCafesData()
         }
         _uiState.update {

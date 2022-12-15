@@ -188,4 +188,66 @@ object LocalPlaceDataProvider {
             )
         )
     }
+
+    fun getShoppingCentersData(): List<Place> {
+        return listOf(
+            Place(
+                id = 1,
+                categoryId = R.string.shopping_center,
+                titleResourceId = R.string.shinsegae_dept_store_centum_city,
+                startPoint = 4.0,
+                imageResourceId = R.drawable.shinsegae_dept_store_centum_city,
+                newsDetails = R.string.shopping_center_detail
+            ),
+            Place(
+                id = 2,
+                categoryId = R.string.shopping_center,
+                titleResourceId = R.string.nc_department_store,
+                startPoint = 4.0,
+                imageResourceId = R.drawable.nc_department_store,
+                newsDetails = R.string.shopping_center_detail
+            ),
+            Place(
+                id = 3,
+                categoryId = R.string.shopping_center,
+                titleResourceId = R.string.lotte_department_store,
+                startPoint = 4.4,
+                imageResourceId = R.drawable.lotte_department_store,
+                newsDetails = R.string.shopping_center_detail
+            ),
+            Place(
+                id = 4,
+                categoryId = R.string.shopping_center,
+                titleResourceId = R.string.gupo_market,
+                startPoint = 4.5,
+                imageResourceId = R.drawable.gupo_market,
+                newsDetails = R.string.shopping_center_detail
+            ),
+            Place(
+                id = 5,
+                categoryId = R.string.shopping_center,
+                titleResourceId = R.string.seomyeon_underground_shopping_center,
+                startPoint = 4.4,
+                imageResourceId = R.drawable.seomyeon_underground_shopping_center,
+                newsDetails = R.string.shopping_center_detail
+            ),
+            Place(
+                id = 6,
+                categoryId = R.string.shopping_center,
+                titleResourceId = R.string.lotte_mall_dong_busan,
+                startPoint = 4.0,
+                imageResourceId = R.drawable.lotte_mall_dong_busan,
+                newsDetails = R.string.shopping_center_detail
+            ),
+            Place(
+                id = 7,
+                categoryId = R.string.shopping_center,
+                titleResourceId = R.string.nampo_underground_shopping_center,
+                startPoint = 3.5,
+                imageResourceId = R.drawable.nampo_underground_shopping_center,
+                newsDetails = R.string.shopping_center_detail
+            )
+        )
+    }
+
 }
