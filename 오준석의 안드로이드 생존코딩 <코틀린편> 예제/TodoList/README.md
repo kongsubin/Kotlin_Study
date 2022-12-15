@@ -38,7 +38,8 @@
 
 # Room 데이터베이스 사용
 ### 1. 모듈 수준의 build.gradle
-    ~~~kotlin
+
+~~~kotlin
     ...
     plugins {
         ...
@@ -55,10 +56,12 @@
         kapt("androidx.room:room-compiler:$room_version")
         implementation("androidx.room:room-ktx:$room_version")
     }
-    ~~~
-
+~~~
+    
+    
 ### 2. data class 생성
-    ~~~kotlin
+    
+~~~kotlin
         @Entity
         data class Todo (
             var title: String,
@@ -67,10 +70,11 @@
             @PrimaryKey(autoGenerate = true)
             var id: Long = 0
         }
-    ~~~
+~~~
 
 ### 3. DAO 생성
-    ~~~kotlin
+    
+~~~kotlin
         @Dao
         interface TodoDao {
             @Query("SELECT * FROM todo ORDER BY date DESC")
@@ -86,20 +90,21 @@
             @Delete
             suspend fun delete(entity: Todo)
         }
-    ~~~
+~~~
 
 ### 4. Database 생성
-    ~~~kotlin
+    
+~~~kotlin
         @Database(entities = [Todo::class], version = 1)
         abstract class TodoDatabase : RoomDatabase() {
             abstract fun todoDao(): TodoDao
         }
-    ~~~
+~~~
 
 ### 4. AndroidViewModel 생성
 > ViewModel vs AndroidViewModel : application객체를 사용할 수 있냐의 차이. AndroidViewModel에서는 사용이 가능
 
-    ~~~kotlin
+~~~kotlin
         class MainViewModel(application: Application) : AndroidViewModel(application) {
             // Room 데이터베이스
             private val db = Room.databaseBuilder(
@@ -114,7 +119,7 @@
                 }
             }
         }
-    ~~~
+~~~
 
 
 # Calendar 클래스 사용법 
